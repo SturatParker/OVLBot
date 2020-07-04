@@ -1,0 +1,27 @@
+{
+  "name": "ovalbot",
+  "version": "1.0.0",
+  "description": "Discord bot for Omnivoracious Listeners",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SturatParker/OvalBot.git"
+  },
+  "keywords": [
+    "discord",
+    "node.js"
+  ],
+  "author": "Sturat",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SturatParker/OvalBot/issues"
+  },
+  "homepage": "https://github.com/SturatParker/OvalBot#readme",
+  "dependencies": {
+    "discord.js": "^12.2.0",
+    "dotenv": "^8.2.0"
+  }
+}
