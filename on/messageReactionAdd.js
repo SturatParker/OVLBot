@@ -1,6 +1,13 @@
 require("dotenv").config();
+const { createVote } = require("../db/db");
 
 module.exports = async (messageReaction, user) => {
+	if (messageReaction.message.channel.id != process.env.CHANNEL) {
+		return;
+	}
+	if (messageReaction.emoji.name != "👍") {
+		return;
+	}
 	if (messageReaction.partial) {
 		try {
 			await messageReaction.fetch();
@@ -9,14 +16,14 @@ module.exports = async (messageReaction, user) => {
 			return;
 		}
 	}
-
-	if (messageReaction.emoji.name == "👍") {
-		return user
-			.send(
-				"Thanks for your vote! I won't remember it because I don't have a database yet!"
-			)
-			.then(() => {
-				return messageReaction.remove();
-			});
-	}
+	return createVote({ user: user.id, message: messageReaction.message.id })
+		.then(res => {
+			return user.send(
+				`Thanks for voting for ${messageReaction.message.content}`
+			);
+		})
+		.then(() => {
+			return messageReaction.remove();
+		})
+		.catch(console.log);
 };
