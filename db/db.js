@@ -15,10 +15,10 @@ const connect = () => {
 }
 
 const createVote = (vote) => {
-    let record = new Vote
-    record.user = vote.user
-    record.message = vote.message
-    record._id = new mongoose.mongo.ObjectID()
+    let record = new Vote(vote)
+    //record.user = vote.user
+    //record.message = vote.message
+    //record._id = new mongoose.mongo.ObjectID()
     return record.save()
 }
 
