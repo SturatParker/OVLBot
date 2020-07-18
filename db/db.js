@@ -19,5 +19,10 @@ const createVote = (vote) => {
     return record.save()
 }
 
+const getVotes = ( params ) => {
+    return Vote.find(params)
+}
+
 exports.connect = connect
 exports.createVote = createVote
+exports.getVotes =  getVotes
