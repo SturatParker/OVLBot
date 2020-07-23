@@ -1,13 +1,32 @@
 require('dotenv').config();
 const prefix = process.env.PREFIX
+const winner = require('../commands/winner')
 
 module.exports = message => {
-    if (message.author.bot)
-        return
     console.log(message.content)
-    if (!message.content.startsWith(prefix))
+    // Ignore bot users
+    if (message.author.bot) {
         return
+    }
+    // Ignore incorrect prefix
+    if (!message.content.startsWith(prefix)) {
+        return
+    }
     message.content = message.content.slice(prefix.length)
+    args = message.content.match(/(?:[^\s"]+|"[^"]*")+/g)
+    // Ignore no command
+    if (!args.length) {
+        return
+    }
+    command = args[0].toLowerCase()
+    args.shift()
+    switch (command) {
+        case "winner": 
+            return winner(message, ...args);
+        default:
+            return;
+    }
+
     if (message.content = "ping") {
         message.channel.send("pong")
     }
