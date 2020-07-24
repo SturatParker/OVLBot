@@ -1,6 +1,5 @@
 require("dotenv").config();
 const { getVotes } = require("../db/db");
-const { Message } = require("discord.js");
 const tallyReducer = (acc, cur) => {
 	prev = acc.find(x => {
 		return x.message == cur.message;
