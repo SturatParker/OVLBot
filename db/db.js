@@ -32,9 +32,13 @@ const getVotedItems = userid => {
 const getItem = id => {
 	return Item.findOne({ messageId: id });
 };
+const getAllItems = () => {
+	return Item.find();
+};
 
 exports.connect = connect;
 exports.createItem = createItem;
 exports.getVotedItems = getVotedItems;
 exports.getItem = getItem;
 exports.pushVote = pushVote;
+exports.getAllItems = getAllItems;
