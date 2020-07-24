@@ -14,15 +14,6 @@ const connect = () => {
 	});
 };
 
-const createVote = vote => {
-	let record = new Vote(vote);
-	return record.save();
-};
-
-const getVotes = params => {
-	return Vote.find(params);
-};
-
 const createItem = item => {
 	if (!item.messageId) {
 		return Promise.reject(new TypeError("item.messageId is not defined"));
@@ -43,8 +34,6 @@ const getItem = id => {
 };
 
 exports.connect = connect;
-exports.createVote = createVote;
-exports.getVotes = getVotes;
 exports.createItem = createItem;
 exports.getVotedItems = getVotedItems;
 exports.getItem = getItem;
