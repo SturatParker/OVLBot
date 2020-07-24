@@ -50,12 +50,11 @@ const processMessageReaction = (messageReaction, user, items) => {
 			`you have already voted for you own submissions the maximum number of times (${ownLim})`
 		);
 	}
-	if (
-		items.some(item => {
-			item.messageId = msgId;
-		})
-	) {
-		return rejectVote(user, voteText, "you have already voted for it");
+	let isDupe = items.some(item => {
+		return item.messageId == msgId;
+	})
+	if (isDupe) {
+		return rejectVote(user, msgContent, "you have already voted for it");
 	}
 	return getItem(msgId).then(item => {
 		if (item) {
