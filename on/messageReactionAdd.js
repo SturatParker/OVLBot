@@ -1,7 +1,5 @@
 require("dotenv").config();
 const {
-	getVotes,
-	createVote,
 	createItem,
 	getVotedItems,
 	getItem,
@@ -31,7 +29,7 @@ const processMessageReaction = (messageReaction, user, items) => {
 	voteLim = process.env.VOTE_LIMIT;
 	ownLim = process.env.OWN_VOTE_LIMIT;
 	msgId = messageReaction.message.id;
-	msgContent = messageReaction.message.content;
+	msgContent = messageReaction.message.content.replace(/<@\d+>/); //Strip out mentions
 	submittedBy = messageReaction.message.mentions.users.first();
 	if (items.length >= process.env.VOTE_LIMIT) {
 		return rejectVote(
@@ -85,8 +83,8 @@ module.exports = (messageReaction, user) => {
 		.then(() => {
 			return getVotedItems(user.id);
 		})
-		.then(Items => {
-			processMessageReaction(messageReaction, user, Items);
+		.then(items => {
+			processMessageReaction(messageReaction, user, items);
 		})
 		.then(messageReaction.remove());
 };
