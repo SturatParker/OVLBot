@@ -1,6 +1,7 @@
 require('dotenv').config();
 const prefix = process.env.PREFIX
 const winner = require('../commands/winner')
+const reset = require('../commands/reset')
 
 module.exports = message => {
     console.log(message.content)
@@ -23,6 +24,8 @@ module.exports = message => {
     switch (command) {
         case "winner": 
             return winner(message, ...args);
+        case "reset":
+            return reset(message, ...args)
         default:
             return;
     }
