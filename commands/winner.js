@@ -2,9 +2,9 @@ require("dotenv").config();
 const { getAllItems } = require("../db/db");
 
 module.exports = (message, ...args) => {
-	// if (!message.member.hasPermission("MANAGE_GUILD")) {
-	// 	return Promise.resolve();
-	// }
+	if (!message.member.hasPermission("MANAGE_GUILD")) {
+		return Promise.resolve();
+	}
 	return getAllItems().then(items => {
 		votedItems = items
 			.filter(item => item.voterIds.length)
@@ -33,7 +33,5 @@ module.exports = (message, ...args) => {
 			}))
 		};
 		return message.channel.send({embed});
-		let a = new String()
-		a.slice()
 	});
 };
