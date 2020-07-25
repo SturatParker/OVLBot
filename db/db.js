@@ -1,6 +1,5 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
-const Vote = require("./model/vote");
 const Item = require("./model/item");
 
 const user = process.env.MONGODB_USER;
@@ -36,9 +35,19 @@ const getAllItems = () => {
 	return Item.find();
 };
 
+const resetItemVotes = () => {
+	let update = {
+		$set: {
+			voterIds: []
+		}
+	};
+	return Item.updateMany({}, update);
+};
+
 exports.connect = connect;
 exports.createItem = createItem;
 exports.getVotedItems = getVotedItems;
 exports.getItem = getItem;
 exports.pushVote = pushVote;
 exports.getAllItems = getAllItems;
+exports.resetItemVotes = resetItemVotes
