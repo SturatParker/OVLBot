@@ -22,7 +22,7 @@ const createItem = item => {
 };
 
 const pushVote = (messageId, userid) => {
-	return Item.update({ messageId: messageId }, { $push: { voterIds: userid } });
+	return Item.findOneAndUpdate({ messageId: messageId }, { $push: { voterIds: userid } });
 };
 
 const getVotedItems = userid => {
