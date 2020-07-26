@@ -1,10 +1,5 @@
 require("dotenv").config();
-const {
-	createItem,
-	getVotedItems,
-	getItem,
-	pushVote
-} = require("../db/db");
+const { createItem, getVotedItems, getItem, pushVote } = require("../db/db");
 
 const acknowledgeVote = (user, voteMessage) => {
 	return user.send(`Thanks for voting for ***${voteMessage}***`);
@@ -29,7 +24,7 @@ const processMessageReaction = (messageReaction, user, items) => {
 	voteLim = process.env.VOTE_LIMIT;
 	ownLim = process.env.OWN_VOTE_LIMIT;
 	msgId = messageReaction.message.id;
-	msgContent = messageReaction.message.content.replace(/<@\d+>/,""); //Strip out mentions
+	msgContent = messageReaction.message.content.replace(/<@\d+>/, ""); //Strip out mentions
 	submittedBy = messageReaction.message.mentions.users.first();
 	if (items.length >= process.env.VOTE_LIMIT) {
 		return rejectVote(
@@ -38,9 +33,13 @@ const processMessageReaction = (messageReaction, user, items) => {
 			`you have cast the maximum number of votes (${voteLim})`
 		);
 	}
-	selfVotes = items.find(item => {
-		item.submittedById == user.id;
+	let isDupe = items.some(item => {
+		return item.messageId == msgId;
 	});
+	if (isDupe) {
+		return rejectVote(user, msgContent, "you have already voted for it");
+	}
+	let selfVotes = items.filter(item => item.submittedById == user.id);
 	if (selfVotes && selfVotes.length >= ownLim) {
 		return rejectVote(
 			user,
@@ -48,15 +47,9 @@ const processMessageReaction = (messageReaction, user, items) => {
 			`you have already voted for you own submissions the maximum number of times (${ownLim})`
 		);
 	}
-	let isDupe = items.some(item => {
-		return item.messageId == msgId;
-	})
-	if (isDupe) {
-		return rejectVote(user, msgContent, "you have already voted for it");
-	}
 	return getItem(msgId).then(item => {
 		if (item) {
-			return pushVote(user.id).then(() => {
+			return pushVote(msgId, user.id).then(res => {
 				return acknowledgeVote(user, msgContent);
 			});
 		}
