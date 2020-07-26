@@ -44,10 +44,15 @@ const resetItemVotes = () => {
 	return Item.updateMany({}, update);
 };
 
+const deleteItem = messageid => {
+	return Item.findOneAndDelete({ messageId: messageId });
+};
+
 exports.connect = connect;
 exports.createItem = createItem;
 exports.getVotedItems = getVotedItems;
 exports.getItem = getItem;
 exports.pushVote = pushVote;
 exports.getAllItems = getAllItems;
-exports.resetItemVotes = resetItemVotes
+exports.resetItemVotes = resetItemVotes;
+exports.deleteItem = deleteitem;
