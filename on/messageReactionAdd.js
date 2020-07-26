@@ -46,14 +46,14 @@ const processMessageReaction = (messageReaction, user, items) => {
 	if (isDupe) {
 		return rejectVote(user, msgContent, "you have already voted for it");
 	}
-	if (submittedBy.id == user.id ) {
+	if (submittedBy && submittedBy.id == user.id ) {
 
-		let selfVotes = items.filter(item => item.submittedById == user.id);
-		if (selfVotes && selfVotes.length >= ownLim) {
+		let selfVotes = [...items.filter(item => item.submittedById == user.id)];
+		if (selfVotes.length >= ownLim) {
 			return rejectVote(
 				user,
 				msgContent,
-				`you have already voted for you own submissions the maximum number of times (${ownLim})`
+				`you have already voted for your own submissions the maximum number of times (${ownLim})`
 			);
 		}
 	}
