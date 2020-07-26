@@ -1,5 +1,7 @@
 require("dotenv").config();
 const { getAllItems } = require("../db/db");
+const { color } = require("../config");
+const { MessageEmbed } = require("discord.js");
 
 module.exports = (message, ...args) => {
 	if (!message.member.hasPermission("MANAGE_GUILD")) {
@@ -21,17 +23,18 @@ module.exports = (message, ...args) => {
 			item => item.voterIds.length == votedItems[0].voterIds.length
 		);
 		isTie = winners.length > 1;
-		const embed = {
-			title: "Poll winners",
-			description: `A total of ${totalVotes} votes were cast this round. With ${
-				winners[0].voterIds.length
-			} votes the ${isTie ? "tied winners are" : "winner is"}:`,
-			color: 1353797,
-			fields: winners.map(item => ({
-				name: item.messageContent,
-				value: `Submitted by: <@${item.submittedById}>`
-			}))
-		};
-		return message.channel.send({embed});
+		const embed = new MessageEmbed()
+			.setTitle("Poll winners")
+			.setDescription(
+				`A total of ${totalVotes} votes were cast this round. With ${
+					winners[0].voterIds.length
+				} votes the ${isTie ? "tied winners are" : "winner is"}:`
+			)
+			.setColor(color.success);
+		embed.fields = winners.map(item => ({
+			name: item.messageContent,
+			value: `Submitted by: <@${item.submittedById}>`
+		}));
+		return message.channel.send({ embed });
 	});
 };
