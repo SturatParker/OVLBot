@@ -31,8 +31,4 @@ module.exports = message => {
         default:
             return;
     }
-
-    if (message.content = "ping") {
-        message.channel.send("pong")
-    }
 }
