@@ -1,14 +1,14 @@
 {
-  "name": "ovalbot",
+  "name": "ovlbot",
   "version": "1.0.0",
   "description": "Discord bot for Omnivoracious Listeners",
-  "main": "index.js",
+  "main": "bot.js",
   "scripts": {
     "test": "test"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SturatParker/OvalBot.git"
+    "url": "git+https://github.com/SturatParker/OVLBot.git"
   },
   "keywords": [
     "discord",
@@ -17,9 +17,9 @@
   "author": "Sturat",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/SturatParker/OvalBot/issues"
+    "url": "https://github.com/SturatParker/OVLBot/issues"
   },
-  "homepage": "https://github.com/SturatParker/OvalBot#readme",
+  "homepage": "https://github.com/SturatParker/OVLBot#readme",
   "dependencies": {
     "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
