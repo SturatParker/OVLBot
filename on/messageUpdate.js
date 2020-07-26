@@ -7,9 +7,5 @@ module.exports = (oldMessage, newMessage) => {
     if (oldMessage.channel.id != process.env.CHANNEL) {
         return Promise.resolve()
     }
-    // Ignore bot users
-    if (oldMessage.author.bot) {
-        return
-    }
-    return deleteItem(oldmessage.id)
+    return deleteItem(oldMessage.id)
 }
