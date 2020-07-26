@@ -1,14 +1,11 @@
 require("dotenv").config();
 const { resetItemVotes } = require("../db/db");
 const { MessageEmbed } = require('discord.js')
+const { color } = require('../config')
 
 module.exports = (message, ...args) => {
 	if (!message.member.hasPermission("MANAGE_GUILD")) {
 		return Promise.resolve();
-    }
-    color = {
-        success: 1353797,
-        error: 16711680
     }
     embed = new MessageEmbed();
 	return resetItemVotes()
