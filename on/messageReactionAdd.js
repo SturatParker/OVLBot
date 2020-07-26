@@ -28,8 +28,8 @@ const completePartial = message => {
 };
 
 const processMessageReaction = (messageReaction, user, items) => {
-	voteLim = process.env.VOTE_LIMIT;
-	ownLim = process.env.OWN_VOTE_LIMIT;
+	voteLim = Number(process.env.VOTE_LIMIT);
+	ownLim = Number(process.env.OWN_VOTE_LIMIT);
 	msgId = messageReaction.message.id;
 	msgContent = messageReaction.message.content.replace(/<@\d+>/, ""); //Strip out mentions
 	submittedBy = messageReaction.message.mentions.users.first();
