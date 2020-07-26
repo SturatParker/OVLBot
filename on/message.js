@@ -4,7 +4,9 @@ const winner = require('../commands/winner')
 const reset = require('../commands/reset')
 
 module.exports = message => {
-    console.log(message.content)
+    if (process.env.MODE == "dev") {
+        console.log(message.content)
+    }
     // Ignore bot users
     if (message.author.bot) {
         return
@@ -28,9 +30,5 @@ module.exports = message => {
             return reset(message, ...args)
         default:
             return;
-    }
-
-    if (message.content = "ping") {
-        message.channel.send("pong")
     }
 }

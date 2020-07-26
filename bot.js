@@ -3,7 +3,8 @@ const { connect } = require('./db/db')
 const { Client } = require("discord.js");
 const message = require("./on/message");
 const ready = require("./on/ready");
-const messageReactionAdded = require("./on/messageReactionAdd");
+const messageReactionAdd = require("./on/messageReactionAdd");
+const messageUpdate = require("./on/messageUpdate")
 const bot = new Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
 
 connect()
@@ -17,5 +18,5 @@ bot.on("ready", function() {
 });
 
 bot.on("message", message);
-
-bot.on("messageReactionAdd", messageReactionAdded);
+bot.on("messageReactionAdd", messageReactionAdd);
+bot.on("messageUpdate", messageUpdate)
