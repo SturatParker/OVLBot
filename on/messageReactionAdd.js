@@ -48,7 +48,6 @@ const processMessageReaction = (messageReaction, user, items) => {
 	}
 	if (submittedBy.id == user.id ) {
 		let selfVotes = [...items.filter(item => item.submittedById == user.id)];
-		console.log(selfVotes.length, ownLim, selfVotes >= ownLim);
 		if (selfVotes.length >= ownLim) {
 			return rejectVote(
 				user,
