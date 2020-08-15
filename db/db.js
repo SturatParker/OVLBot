@@ -48,6 +48,10 @@ const deleteItem = id => {
 	return Item.findOneAndRemove({ messageId: id });
 };
 
+const itemsByVoterId = voterId => {
+	return Item.find({voterIds: voterId})
+}
+
 exports.connect = connect;
 exports.createItem = createItem;
 exports.getVotedItems = getVotedItems;
@@ -56,3 +60,4 @@ exports.pushVote = pushVote;
 exports.getAllItems = getAllItems;
 exports.resetItemVotes = resetItemVotes;
 exports.deleteItem = deleteItem;
+exports.itemsByVoterId = itemsByVoterId
