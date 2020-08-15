@@ -31,7 +31,7 @@ const processMessageReaction = (messageReaction, user, items) => {
 	voteLim = Number(process.env.VOTE_LIMIT);
 	ownLim = Number(process.env.OWN_VOTE_LIMIT);
 	msgId = messageReaction.message.id;
-	msgContent = messageReaction.message.content.replace(/<@\d+>/, ""); //Strip out mentions
+	msgContent = messageReaction.message.content.replace(/<@!?\d+>/g, ""); //Strip out mentions
 	submittedBy = messageReaction.message.mentions.users.first();
 	if (items.length >= process.env.VOTE_LIMIT) {
 		return rejectVote(
