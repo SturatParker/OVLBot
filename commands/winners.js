@@ -29,7 +29,7 @@ module.exports = {
 			winners = [];
 			isTie = false;
 			topN = parseInt(args[0]);
-			if (typeof topN === "number") {
+			if (!isNaN(topN)) {
 				//top args[0] items
 				winners = votedItems.slice(0, topN);
 			} else {
@@ -42,14 +42,12 @@ module.exports = {
 			const embed = new MessageEmbed()
 				.setTitle("Poll winners")
 				.setDescription(
-					`A total of ${totalVotes} votes were cast this round. ${topN ? "The top items are": `With ${
-						winners[0].voterIds.length
-					} votes the $${isTie ? "tied winners are" : "winner is"}`}:`
+					`A total of ${totalVotes} votes were cast this round. ${topN ? "The top items are": `The ${isTie ? "tied winners are" : "winner is"}`}:`
 				)
 				.setColor(color.success);
 			embed.fields = winners.map(item => ({
 				name: item.messageContent,
-				value: `Submitted by: <@${item.submittedById}>`
+				value: `${item.voterIds.length} votes, submitted by: <@${item.submittedById}>`
 			}));
 			return message.channel.send({ embed });
 		});

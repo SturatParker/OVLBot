@@ -40,7 +40,7 @@ module.exports = message => {
 		.get(command)
 		.execute(message, ...args)
 		.catch(err => {
-			console.log(err);
+			console.log(err.stack);
 			embed = new MessageEmbed()
 				.setTitle("Oops")
 				.setDescription("Something went terribly wrong.")
