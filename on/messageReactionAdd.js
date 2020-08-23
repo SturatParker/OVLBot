@@ -1,22 +1,26 @@
 require("dotenv").config();
-const { createItem, getVotedItems, getItem, pushVote } = require("../db/db");
-const { MessageEmbed } = require('discord.js')
-const { color } = require('../config')
+const { getVotedItems, getItem, pushVote } = require("../db/db");
+const { messageToItem } = require("../db/messageToItem");
+const { MessageEmbed } = require("discord.js");
+const { color, monitoring } = require("../config");
 
 const acknowledgeVote = (user, voteMessage) => {
 	const embed = new MessageEmbed()
 		.setTitle("Success")
 		.setDescription(`Thanks for voting for ***${voteMessage}***`)
-		.setColor(color.success)
-	return user.send({embed});
+		.setColor(color.success);
+	return user.send({ embed });
 };
 
 const rejectVote = (user, voteMessage, reason) => {
 	const embed = new MessageEmbed()
 		.setTitle("Vote failed")
-		.setDescription(`We couldn't register your vote for ***${voteMessage}*** because ${reason || "unspecified reason"}`)
-		.setColor(color.error)
-	return user.send({embed});
+		.setDescription(
+			`We couldn't register your vote for ***${voteMessage}*** because ${reason ||
+				"unspecified reason"}`
+		)
+		.setColor(color.error);
+	return user.send({ embed });
 };
 
 const completePartial = message => {
@@ -46,7 +50,7 @@ const processMessageReaction = (messageReaction, user, items) => {
 	if (isDupe) {
 		return rejectVote(user, msgContent, "you have already voted for it");
 	}
-	if (submittedBy.id == user.id ) {
+	if (submittedBy.id == user.id) {
 		let selfVotes = [...items.filter(item => item.submittedById == user.id)];
 		if (selfVotes.length >= ownLim) {
 			return rejectVote(
@@ -62,22 +66,21 @@ const processMessageReaction = (messageReaction, user, items) => {
 				return acknowledgeVote(user, msgContent);
 			});
 		}
-		return createItem({
-			messageId: messageReaction.message.id,
-			submittedById: submittedBy ? submittedBy.id : "",
-			messageContent: msgContent,
-			voterIds: [user.id]
-		}).then(() => {
+		return messageToItem(message, [user.id]).then(() => {
 			acknowledgeVote(user, msgContent);
 		});
 	});
 };
 
 module.exports = (messageReaction, user) => {
-	if (messageReaction.message.channel.id != process.env.CHANNEL) {
+	if (messageReaction.emoji.name != "👍") {
 		return Promise.resolve();
 	}
-	if (messageReaction.emoji.name != "👍") {
+	if (
+		!monitoring.channels.some(
+			channel => channel == messageReaction.message.channel.id
+		)
+	) {
 		return Promise.resolve();
 	}
 	//return Promise.resolve();
