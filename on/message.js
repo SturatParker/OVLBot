@@ -8,10 +8,11 @@ const commandsFiles = fs
 const commands = new Collection(
 	commandsFiles.map(file => {
 		const cmd = require(`../commands/${file}`);
-		return [cmd.name, cmd];
+		return [cmd.name.toLowerCase(), cmd];
 	})
 );
 const { color } = require("../config");
+const messageToItem = require("../db/messageToItem")
 
 module.exports = message => {
 	if (process.env.MODE == "dev") {
@@ -21,12 +22,13 @@ module.exports = message => {
 	if (message.author.bot) {
 		return;
 	}
+	messageToItem(message)
 	// Ignore incorrect prefix
 	if (!message.content.startsWith(prefix)) {
 		return;
 	}
 	message.content = message.content.slice(prefix.length);
-	args = message.content.trim().match(/(?:[^\s"]+|"[^"]*")+/g);
+	let args = message.content.trim().match(/(?:[^\s"]+|"[^"]*")+/g);
 	// Ignore no command
 	if (!args.length) {
 		return;
@@ -43,7 +45,7 @@ module.exports = message => {
 			console.log(err.stack);
 			embed = new MessageEmbed()
 				.setTitle("Oops")
-				.setDescription("Something went terribly wrong.")
+				.setDescription(`Something went terribly wrong.\n${err}`)
 				.setColor(color.error);
 			return message.channel.send({ embed });
 		});
