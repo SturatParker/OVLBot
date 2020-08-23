@@ -25,7 +25,7 @@ module.exports = {
 		) {
 			return Promise.resolve();
 		}
-		const commandArg = args[0] ? args[0].toLowerCase() : "";
+		const commandArg = args[0] || "";
 		if (!commandArg) {
 			embed = new MessageEmbed()
 				.setColor(color.success)
