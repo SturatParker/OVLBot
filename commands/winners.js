@@ -1,12 +1,14 @@
 require("dotenv").config();
 const { getAllItems } = require("../db/db");
-const { color } = require("../config");
+const { color, monitoring } = require("../config");
 const { MessageEmbed } = require("discord.js");
+
+const exampleChannel = monitoring.channels[0] || process.env.CHANNEL
 
 module.exports = {
 	name: "winners",
 	description: "Return the winners of the poll",
-	help: "\`winners <top>\`\nExamples:\n\`winners\`\n\`winners 2\`",
+	help: `\`winners <#channel> <top>\`\nExamples:\n\`winners <#${exampleChannel}>\`\n\`winners <#${exampleChannel}> 2\``,
 	execute: (message, ...args) => {
 		if (
 			!message.member.hasPermission("MANAGE_GUILD") &&
@@ -14,7 +16,19 @@ module.exports = {
 		) {
 			return Promise.resolve();
 		}
-		return getAllItems().then(items => {
+
+		let channelId = args[0] ? args[0].replace(/<#(.*?)>/, "$1") : undefined;
+		if (
+			!channelId ||
+			typeof channelId != "string" ||
+			!message.mentions.channels.has(channelId)
+		) {
+			return Promise.reject("Missing required argument: #channel");
+		}
+		if (!monitoring.channels.some(channel => channel == channelId)) {
+			return Promise.reject(`<#${channelId}> is not monitored`)
+		}
+		return getAllItems(channelId).then(items => {
 			votedItems = items
 				.filter(item => item.voterIds.length)
 				.sort((a, b) => {
@@ -28,7 +42,7 @@ module.exports = {
 			}, 0);
 			winners = [];
 			isTie = false;
-			topN = parseInt(args[0]);
+			topN = parseInt(args[1]);
 			if (!isNaN(topN)) {
 				//top args[0] items
 				winners = votedItems.slice(0, topN);
