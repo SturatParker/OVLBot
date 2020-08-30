@@ -43,7 +43,7 @@ module.exports = message => {
 			console.log(err.stack);
 			embed = new MessageEmbed()
 				.setTitle("Oops")
-				.setDescription("Something went terribly wrong.")
+				.setDescription(`${err}\nTry \`help\` for more info`)
 				.setColor(color.error);
 			return message.channel.send({ embed });
 		});
