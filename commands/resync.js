@@ -4,7 +4,7 @@ const { MessageEmbed } = require("discord.js");
 const { color } = require("../config");
 
 module.exports = {
-	name: "reset",
+	name: "resync",
 	description: "Resynchronise the database with Discord message submissions",
 	execute: (message, ...args) => {
 		if (
@@ -13,14 +13,36 @@ module.exports = {
 		) {
 			return Promise.resolve();
 		}
-		embed = new MessageEmbed();
-		let channel = message.guild.channels.cache.get(process.env.CHANNEL)
-		return getAllItems().then(items => {
-			items.forEach(item=> {
-				channel.messages.fetch(item.messageId).then(
-					
-				)
-			})
+
+		const resyncItem = item => {
+
+			let channel = message.guild.channels.cache.get(item.channelId || process.env.CHANNEL)
+			 	
+			return channel.messages.fetch(item.messageId)
+			.then(message => {
+					msgContent = message.content.replace(/<@!?\d+>/g, ""); //Strip out mentions
+					submittedBy = message.mentions.users.first();
+					if (msgContent == item.messageContent && submittedBy == item.submittedById) {
+							return Promise.resolve()
+						} else {
+								item.messageContent = msgContent;
+								item.submittedById = submittedBy;
+								return item.save()
+							}
+						})
+		}
+
+		const resync = items => {
+			const promiseArray = items.map(resyncItem)
+			return Promise.all(promiseArray)
+		}
+		
+		return getAllItems().then(resync).then(res=> {
+			embed = new MessageEmbed()
+			.setColor(color.success)
+			.setTitle("Resync")
+			.setDescription("Resync complete");
+			return message.channel.send({embed})
 		});
 	}
 };
