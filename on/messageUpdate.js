@@ -8,6 +8,6 @@ module.exports = (oldMessage, newMessage) => {
         return Promise.resolve()
     }
     return deleteItem(oldMessage.id).then(res=> {
-        console.log(res)
+        console.log(`Delete message id ${newMessage.id}`)
     })
 }
