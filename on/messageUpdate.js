@@ -7,5 +7,7 @@ module.exports = (oldMessage, newMessage) => {
     if (oldMessage.channel.id != process.env.CHANNEL) {
         return Promise.resolve()
     }
-    return deleteItem(oldMessage.id)
+    return deleteItem(oldMessage.id).then(res=> {
+        console.log(`Delete message id ${newMessage.id}`)
+    })
 }

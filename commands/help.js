@@ -8,19 +8,18 @@ const { Collection } = require("discord.js");
 const commandsFiles = fs
 	.readdirSync("./commands")
 	.filter(file => file.endsWith(".js") && file !== "help.js");
-const commands = new Collection(
-	commandsFiles.map(file => {
-		const cmd = require(`../commands/${file}`);
-		return [cmd.name, cmd];
-	})
-);
+const commandArrays = commandsFiles.map(file => {
+	const cmd = require(`../commands/${file}`);
+	return [cmd.name, cmd];
+})
+const commands = new Collection(commandArrays);
 
 module.exports = {
 	name: "help",
 	description: `Type \`${process.env.PREFIX}help <command>\` for further details`,
 	execute: function(message, ...args) {
 		if (
-			!message.member.hasPermission("MANAGE_GUILD") &&
+			(!message.member || !message.member.hasPermission("MANAGE_GUILD")) &&
 			process.env.MODE != "dev"
 		) {
 			return Promise.resolve();

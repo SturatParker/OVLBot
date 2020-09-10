@@ -7,6 +7,8 @@ const password = process.env.MONGODB_PASSWORD;
 const url = process.env.MONGODB_URL;
 const uri = `mongodb+srv://${user}:${password}@${url}`;
 
+mongoose.set("useFindAndModify", false);
+
 const connect = () => {
 	return mongoose.connect(uri).then(res => {
 		console.log(`Connected to ${url} as ${user}`);
