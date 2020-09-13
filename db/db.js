@@ -23,8 +23,18 @@ const createItem = item => {
 	return record.save();
 };
 
-const pushVote = (messageId, userid) => {
-	return Item.findOneAndUpdate({ messageId: messageId }, { $push: { voterIds: userid } });
+const pushVote = (messageId, userId) => {
+	return Item.findOneAndUpdate(
+		{ messageId: messageId },
+		{ $push: { voterIds: userId } }
+	);
+};
+
+const pullVote = (messageId, userId) => {
+	return Item.findOneAndUpdate(
+		{ messageId: messageId },
+		{ $pull: { voterIds: userId } }
+	);
 };
 
 const getVotedItems = userid => {
@@ -51,15 +61,16 @@ const deleteItem = id => {
 };
 
 const itemsByVoterId = voterId => {
-	return Item.find({voterIds: voterId})
-}
+	return Item.find({ voterIds: voterId });
+};
 
 exports.connect = connect;
 exports.createItem = createItem;
 exports.getVotedItems = getVotedItems;
 exports.getItem = getItem;
 exports.pushVote = pushVote;
+exports.pullVote = pullVote;
 exports.getAllItems = getAllItems;
 exports.resetItemVotes = resetItemVotes;
 exports.deleteItem = deleteItem;
-exports.itemsByVoterId = itemsByVoterId
+exports.itemsByVoterId = itemsByVoterId;
