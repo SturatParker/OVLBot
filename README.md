@@ -12,3 +12,4 @@
     MODE=                   //Runtime mode e.g. dev
     VOTE_LIMIT=             //Vote limit per member
     OWN_VOTE_LIMIT=         //Vote limit per member on items submitted by themselves
+    CANCEL_LIMIT=           //Limit number of times a member can cancel a vote per round
