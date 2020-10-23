@@ -8,7 +8,6 @@ const {
 } = require("../db/db");
 const { MessageEmbed } = require("discord.js");
 const { color } = require("../config");
-const member = require("../db/model/member");
 const CANCEL_LIMIT = process.env.CANCEL_LIMIT;
 const isPrivate = !process.env.MODE == "dev";
 
