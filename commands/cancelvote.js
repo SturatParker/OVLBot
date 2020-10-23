@@ -9,7 +9,7 @@ const {
 const { MessageEmbed } = require("discord.js");
 const { color } = require("../config");
 const CANCEL_LIMIT = process.env.CANCEL_LIMIT;
-const isPrivate = !process.env.MODE == "dev";
+const isPrivate = process.env.MODE == "dev";
 
 const cancelLimitExceeded = send => {
 	embed = new MessageEmbed();
