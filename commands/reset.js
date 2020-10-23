@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { resetItemVotes } = require("../db/db");
+const { resetItemVotes, memberResetCancelVotes } = require("../db/db");
 const { MessageEmbed } = require("discord.js");
 const { color } = require("../config");
 
@@ -7,11 +7,14 @@ module.exports = {
 	name: "reset",
 	description: "Reset all votes",
 	execute: (message, ...args) => {
-		if (!message.member.hasPermission("MANAGE_GUILD") && process.env.MODE != "dev") {
+		if (
+			!message.member.hasPermission("MANAGE_GUILD") &&
+			process.env.MODE != "dev"
+		) {
 			return Promise.resolve();
 		}
 		embed = new MessageEmbed();
-		return resetItemVotes()
+		return Promise.all([resetItemVotes(), memberResetCancelVotes()])
 			.then(res => {
 				embed
 					.setColor(color.success)
