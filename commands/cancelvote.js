@@ -10,7 +10,7 @@ const { color } = require("../config");
 const CANCEL_LIMIT = process.env.CANCEL_LIMIT;
 const isPrivate = process.env.MODE != "dev";
 
-const cancelLimitExceeded = send => {
+const cancelLimitExceeded = (send) => {
 	embed = new MessageEmbed();
 	embed
 		.setColor(color.success)
@@ -21,7 +21,7 @@ const cancelLimitExceeded = send => {
 	return send({ embed });
 };
 
-const noItems = send => {
+const noItems = (send) => {
 	embed = new MessageEmbed();
 	embed
 		.setColor(color.success)
@@ -34,14 +34,13 @@ module.exports = {
 	name: "cancelvote",
 	description: "Cancel a vote",
 	execute: (message, ...args) => {
-		const send = (...args) => {
+		const send = (...args) =>
 			isPrivate ? message.author.send(...args) : message.channel.send(...args);
-		}
 		embed = new MessageEmbed();
 		return Promise.all([
 			itemsByVoterId(message.author.id),
-			getMemberCancelVotes(message.author.id)
-		]).then(values => {
+			getMemberCancelVotes(message.author.id),
+		]).then((values) => {
 			let [items, cancelCount] = values;
 			if (items.length == 0) {
 				return noItems(send);
@@ -53,23 +52,24 @@ module.exports = {
 				.setColor(color.success)
 				.setTitle("Cancel Vote")
 				.setDescription(
-					`Which vote should be cancelled? Reply with the number.\nYou may cancel your vote ${CANCEL_LIMIT -
-						cancelCount} more times this round.`
+					`Which vote should be cancelled? Reply with the number.\nYou may cancel your vote ${
+						CANCEL_LIMIT - cancelCount
+					} more times this round.`
 				);
 			embed.fields = items.map((item, index) => ({
 				name: `\`${index + 1})\` ${item.messageContent}`,
-				value: `Submitted by: <@${item.submittedById}>`
+				value: `Submitted by: <@${item.submittedById}>`,
 			}));
-			return send({ embed }).then(optionMessage => {
-				const filter = m =>
+			return send({ embed }).then((optionMessage) => {
+				const filter = (m) =>
 					m.author.id === message.author.id &&
 					!isNaN(parseInt(m.content)) &&
 					parseInt(m.content) > 0 &&
 					parseInt(m.content) <= items.length;
 				const collector = optionMessage.channel.createMessageCollector(filter, {
-					time: 15000
+					time: 15000,
 				});
-				collector.on("collect", m => {
+				collector.on("collect", (m) => {
 					index = parseInt(m.content) - 1;
 					item = items[index];
 
@@ -79,7 +79,7 @@ module.exports = {
 						.then(() => {
 							embed.fields[index] = {
 								name: `~~${embed.fields[index].name}~~`,
-								value: `~~${embed.fields[index].value}~~`
+								value: `~~${embed.fields[index].value}~~`,
 							};
 							return Promise.all([m.react("✅"), optionMessage.edit(embed)]);
 						})
@@ -88,5 +88,5 @@ module.exports = {
 				});
 			});
 		});
-	}
+	},
 };
