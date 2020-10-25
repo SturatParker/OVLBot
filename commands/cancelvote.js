@@ -8,6 +8,7 @@ const {
 const { MessageEmbed } = require("discord.js");
 const { color } = require("../config");
 const CANCEL_LIMIT = process.env.CANCEL_LIMIT;
+const isPrivate = process.env.MODE != "dev";
 
 const cancelLimitExceeded = send => {
 	embed = new MessageEmbed();
@@ -34,7 +35,6 @@ module.exports = {
 	description: "Cancel a vote",
 	execute: (message, ...args) => {
 		const send = (...args) => {
-			const isPrivate = process.env.MODE != "dev";
 			isPrivate ? message.author.send(...args) : message.channel.send(...args);
 		}
 		embed = new MessageEmbed();
