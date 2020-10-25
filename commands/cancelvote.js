@@ -34,7 +34,7 @@ module.exports = {
 	description: "Cancel a vote",
 	execute: (message, ...args) => {
 		const send = (...args) => {
-			const isPrivate = process.env.MODE == "dev";
+			const isPrivate = process.env.MODE != "dev";
 			isPrivate ? message.author.send(...args) : message.channel.send(...args);
 		}
 		embed = new MessageEmbed();
