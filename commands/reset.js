@@ -1,11 +1,12 @@
 require("dotenv").config();
-const { resetItemVotes, memberResetCancelVotes } = require("../db/db");
+const { resetItemVotes, dropItems, memberResetCancelVotes } = require("../db/db");
 const { MessageEmbed } = require("discord.js");
 const { color } = require("../config");
 
 module.exports = {
 	name: "reset",
 	description: "Reset all votes",
+	help: "\`reset\`\n\`reset -full\`",
 	execute: (message, ...args) => {
 		if (
 			!message.member.hasPermission("MANAGE_GUILD") &&
@@ -14,7 +15,10 @@ module.exports = {
 			return Promise.resolve();
 		}
 		embed = new MessageEmbed();
-		return Promise.all([resetItemVotes(), memberResetCancelVotes()])
+
+		const itemAction = args.includes("-full") ? dropItems : resetItemVotes
+
+		return Promise.all([itemAction(), memberResetCancelVotes()])
 			.then(res => {
 				embed
 					.setColor(color.success)
