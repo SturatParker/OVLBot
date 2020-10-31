@@ -64,6 +64,8 @@ const processMessageReaction = (messageReaction, user, items) => {
 		}
 		return createItem({
 			messageId: messageReaction.message.id,
+			channelId: messageReaction.message.channel.id,
+			url: messageReaction.message.url,
 			submittedById: submittedBy ? submittedBy.id : "",
 			messageContent: msgContent,
 			voterIds: [user.id]

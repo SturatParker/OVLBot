@@ -47,7 +47,7 @@ module.exports = {
 				.setColor(color.success);
 			embed.fields = winners.map(item => ({
 				name: item.messageContent,
-				value: `${item.voterIds.length} votes, submitted by: <@${item.submittedById}>`
+				value: `${item.url ? `[🔗](${item.url}) ` : ""}${item.voterIds.length} votes, submitted by: <@${item.submittedById}>`
 			}));
 			return message.channel.send({ embed });
 		});
