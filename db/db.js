@@ -63,6 +63,10 @@ const deleteItem = id => {
 	return Item.findOneAndRemove({ messageId: id });
 };
 
+const dropItems = () => {
+	return Item.deleteMany({})
+}
+
 const itemsByVoterId = voterId => {
 	return Item.find({ voterIds: voterId });
 };
@@ -125,6 +129,7 @@ exports.connect = connect;
 exports.createItem = createItem;
 exports.getVotedItems = getVotedItems;
 exports.getItem = getItem;
+exports.dropItems = dropItems;
 exports.pushVote = pushVote;
 exports.pullVote = pullVote;
 exports.getAllItems = getAllItems;
