@@ -6,6 +6,10 @@ const ready = require("./on/ready");
 const messageReactionAdd = require("./on/messageReactionAdd");
 const messageUpdate = require("./on/messageUpdate")
 const bot = new Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
+const { loggingBehaviour } = require('./log')
+
+console.log(`Initialising...`)
+console.log(`Verbose logging ${loggingBehaviour()? "enabled" : "disabled"}`)
 
 connect()
 .then(()=> {
