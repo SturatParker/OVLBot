@@ -5,7 +5,7 @@ const message = require("./on/message");
 const ready = require("./on/ready");
 const messageReactionAdd = require("./on/messageReactionAdd");
 const messageUpdate = require("./on/messageUpdate")
-const bot = new Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
+const bot = new Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION', 'USER'] });
 const { loggingBehaviour } = require('./log')
 
 console.log(`Initialising...`)
