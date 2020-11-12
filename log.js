@@ -5,3 +5,5 @@ exports.log = message => {
 }
 
 exports.error = message => console.error
+
+exports.loggingBehaviour = () => verboseLogs
