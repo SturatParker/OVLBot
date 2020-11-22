@@ -13,12 +13,12 @@ const uri = `mongodb+srv://${user}:${password}@${url}`;
 mongoose.set("useFindAndModify", false);
 
 const connect = () => {
-	return mongoose.connect(uri).then(res => {
+	return mongoose.connect(uri).then((res) => {
 		console.log(`Connected to ${url} as ${user}`);
 	});
 };
 
-const createItem = item => {
+const createItem = (item) => {
 	if (!item.messageId) {
 		return Promise.reject(new TypeError("item.messageId is not defined"));
 	}
@@ -40,10 +40,10 @@ const pullVote = (messageId, userId) => {
 	);
 };
 
-const getVotedItems = userid => {
+const getVotedItems = (userid) => {
 	return Item.find({ voterIds: userid });
 };
-const getItem = id => {
+const getItem = (id) => {
 	return Item.findOne({ messageId: id });
 };
 const getAllItems = () => {
@@ -53,25 +53,25 @@ const getAllItems = () => {
 const resetItemVotes = () => {
 	let update = {
 		$set: {
-			voterIds: []
-		}
+			voterIds: [],
+		},
 	};
 	return Item.updateMany({}, update);
 };
 
-const deleteItem = id => {
+const deleteItem = (id) => {
 	return Item.findOneAndRemove({ messageId: id });
 };
 
 const dropItems = () => {
-	return Item.deleteMany({})
-}
+	return Item.deleteMany({});
+};
 
-const itemsByVoterId = voterId => {
+const itemsByVoterId = (voterId) => {
 	return Item.find({ voterIds: voterId });
 };
 
-const createMember = member => {
+const createMember = (member) => {
 	if (!member.id) {
 		return Promise.reject(new TypeError("member.id is not defined"));
 	}
@@ -79,51 +79,57 @@ const createMember = member => {
 	return record.save();
 };
 
-const memberResetCancelVotes = id => {
+const memberResetCancelVotes = (id) => {
 	const update = {
-		cancelVoteCounter: 0
+		cancelVoteCounter: 0,
 	};
 	if (id == undefined) {
 		return Member.updateMany({}, update);
 	}
 	const filter = {
-		id: id
+		id: id,
 	};
 	return Member.findOneAndUpdate(filter, update);
 };
 
-const memberCancelVote = id => {
+const memberCancelVote = (id) => {
 	const filter = {
-		id: id
+		id: id,
 	};
 	const update = {
 		$inc: {
-			cancelVoteCounter: 1
-		}
+			cancelVoteCounter: 1,
+		},
 	};
-	return Member.findOneAndUpdate(filter, update).then(res =>
+	return Member.findOneAndUpdate(filter, update).then((res) =>
 		res == null ? createMember({ ...filter, cancelVoteCounter: 1 }) : res
 	);
 };
 
-const getMember = id => {
+const getMember = (id) => {
 	const filter = {
-		id: id
+		id: id,
 	};
 	return Member.findOne(filter);
 };
 
-const getMemberCancelVotes = id => {
+const getMemberCancelVotes = (id) => {
 	const filter = {
-		id: id
+		id: id,
 	};
 	const projection = {
-		cancelVoteCounter: 1
+		cancelVoteCounter: 1,
 	};
 	return Member.findOne(filter, projection).then(
-		res => res?.cancelVoteCounter ?? 0
+		(res) => res?.cancelVoteCounter ?? 0
 	);
 };
+
+const deleteMember = (id) =>
+	Promise.all([
+		Item.updateMany({voterIds: id},{ $pull: { voterIds: id } }),
+		Member.findOneAndDelete({ id: id }),
+	]);
 
 exports.connect = connect;
 exports.createItem = createItem;
@@ -141,3 +147,4 @@ exports.getMemberCancelVotes = getMemberCancelVotes;
 exports.memberResetCancelVotes = memberResetCancelVotes;
 exports.createMember = createMember;
 exports.memberCancelVote = memberCancelVote;
+exports.deleteMember = deleteMember
