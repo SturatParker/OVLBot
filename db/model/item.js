@@ -6,7 +6,8 @@ const ItemSchema = new mongoose.Schema({
 	url: String,
 	submittedById: String,
 	messageContent: String,
-	voterIds: [String]
+	voterIds: [String],
+	voteCount: Number,
 });
 
 module.exports = mongoose.model("Item", ItemSchema);
