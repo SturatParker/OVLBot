@@ -1,5 +1,9 @@
 require('dotenv').config()
 
+const { deleteMember } = require('../db/db')
+const { log } = require('../log')
+
 module.exports = guildMember => {
-    console.log("guildMemberRemove: ", guildMember)
+    log(`guildMemberRemoved: ${guildMember.displayName}`)
+    return deleteMember(guildMember.id)
 }
