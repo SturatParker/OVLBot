@@ -19,6 +19,7 @@ const connect = () => {
 };
 
 const createItem = (item) => {
+	item.voteCount = item.voterIds.length;
 	if (!item.messageId) {
 		return Promise.reject(new TypeError("item.messageId is not defined"));
 	}
@@ -29,14 +30,14 @@ const createItem = (item) => {
 const pushVote = (messageId, userId) => {
 	return Item.findOneAndUpdate(
 		{ messageId: messageId },
-		{ $push: { voterIds: userId } }
+		{ $push: { voterIds: userId }, $inc: { voteCount: 1 } }
 	);
 };
 
 const pullVote = (messageId, userId) => {
 	return Item.findOneAndUpdate(
 		{ messageId: messageId },
-		{ $pull: { voterIds: userId } }
+		{ $pull: { voterIds: userId }, $inc: { voteCount: -1 } }
 	);
 };
 
@@ -54,6 +55,7 @@ const resetItemVotes = () => {
 	let update = {
 		$set: {
 			voterIds: [],
+			voteCount: 0,
 		},
 	};
 	return Item.updateMany({}, update);
@@ -127,7 +129,10 @@ const getMemberCancelVotes = (id) => {
 
 const deleteMember = (id) =>
 	Promise.all([
-		Item.updateMany({voterIds: id},{ $pull: { voterIds: id } }),
+		Item.updateMany(
+			{ voterIds: id },
+			{ $pull: { voterIds: id }, $inc: { voteCount: -1 } }
+		),
 		Member.findOneAndDelete({ id: id }),
 	]);
 
@@ -147,4 +152,4 @@ exports.getMemberCancelVotes = getMemberCancelVotes;
 exports.memberResetCancelVotes = memberResetCancelVotes;
 exports.createMember = createMember;
 exports.memberCancelVote = memberCancelVote;
-exports.deleteMember = deleteMember
+exports.deleteMember = deleteMember;
