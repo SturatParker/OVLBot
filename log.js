@@ -4,6 +4,6 @@ exports.log = message => {
     console.log(message);
 }
 
-exports.error = message => console.error
+exports.error = console.error
 
 exports.loggingBehaviour = () => verboseLogs

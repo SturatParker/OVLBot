@@ -5,7 +5,7 @@ const { MessageEmbed } = require("discord.js");
 const { color } = require("../config");
 
 const acknowledgeVote = (user, voteMessage) => {
-	log(`Vote accepted`)
+	log(`Vote accepted`);
 	const embed = new MessageEmbed()
 		.setTitle("Success")
 		.setDescription(`Thanks for voting for ***${voteMessage}***`)
@@ -14,7 +14,7 @@ const acknowledgeVote = (user, voteMessage) => {
 };
 
 const rejectVote = (user, voteMessage, reason) => {
-	log(`Reaction rejected: ${reason}`)
+	log(`Reaction rejected: ${reason}`);
 	const embed = new MessageEmbed()
 		.setTitle("Vote failed")
 		.setDescription(
@@ -89,7 +89,9 @@ module.exports = (messageReaction, user) => {
 	if (messageReaction.message.channel.id != process.env.CHANNEL) {
 		return Promise.resolve();
 	}
-	if (messageReaction.emoji.name != "👍") {
+
+	const voteEmoji =  ["👍","👍🏻","👍🏼","👍🏽","👍🏾","👍🏿"]
+	if (!voteEmoji.includes(messageReaction.emoji.name)) {
 		return Promise.resolve();
 	}
 	log(`Processing reaction...`);
@@ -101,8 +103,8 @@ module.exports = (messageReaction, user) => {
 			return processMessageReaction(messageReaction, user, items);
 		})
 		.then(() => {
-			log(`Clearing reaction...`)
-			return messageReaction.remove()
+			log(`Clearing reaction...`);
+			return messageReaction.remove();
 		})
 		.catch(console.error);
 };
