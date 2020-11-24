@@ -89,7 +89,9 @@ module.exports = (messageReaction, user) => {
 	if (messageReaction.message.channel.id != process.env.CHANNEL) {
 		return Promise.resolve();
 	}
-	if (messageReaction.emoji.name != "👍") {
+
+	const voteEmoji =  ["👍","👍🏻","👍🏼","👍🏽","👍🏾","👍🏿"]
+	if (!voteEmoji.includes(messageReaction.emoji.name)) {
 		return Promise.resolve();
 	}
 	log(`Processing reaction...`);
