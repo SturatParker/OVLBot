@@ -100,11 +100,10 @@ module.exports = (messageReaction, user) => {
 			return getVotedItems(user.id);
 		})
 		.then((items) => {
-			return processMessageReaction(messageReaction, user, items);
-		})
-		.then(() => {
-			log(`Clearing reaction...`);
-			return messageReaction.remove();
+			return Promise.all([
+				processMessageReaction(messageReaction, user, items),
+				messageReaction.remove()				
+			])
 		})
 		.catch(console.error);
 };
