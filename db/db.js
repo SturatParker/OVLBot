@@ -1,8 +1,6 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
-const { create } = require("./model/item");
 const Item = require("./model/item");
-const member = require("./model/member");
 const Member = require("./model/member");
 
 const user = process.env.MONGODB_USER;

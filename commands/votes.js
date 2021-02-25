@@ -6,7 +6,7 @@ const voteLim = process.env.VOTE_LIMIT;
 
 module.exports = {
 	name: "votes",
-	description: "Who have I voted for?",
+	description: "Display a member's votes",
 	help: `\`votes\`\n\`votes @mention\``,
 	execute: (message, ...args) => {
 		queryId = message.mentions.members.first()?.id || message.author.id;
