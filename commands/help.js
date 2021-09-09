@@ -18,12 +18,12 @@ module.exports = {
 	name: "help",
 	description: `Type \`${process.env.PREFIX}help <command>\` for further details`,
 	execute: function(message, ...args) {
-		if (
-			(!message.member || !message.member.hasPermission("MANAGE_GUILD")) &&
-			process.env.MODE != "dev"
-		) {
-			return Promise.resolve();
-		}
+		// if (
+		// 	(!message.member || !message.member.hasPermission("MANAGE_GUILD")) &&
+		// 	process.env.MODE != "dev"
+		// ) {
+		// 	return Promise.resolve();
+		// }
 		const commandArg = args[0] ? args[0].toLowerCase() : "";
 		if (!commandArg) {
 			embed = new MessageEmbed()
